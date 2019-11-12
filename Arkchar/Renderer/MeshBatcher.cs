@@ -113,11 +113,6 @@ namespace Arkchar.Renderer
 
             gl.Translate(0, - 300, 0);
 
-            // Data buffer
-            //var bufferData = new List<float>(vertexArray.Length * 8);
-            //foreach (var item in vertexArray)
-                //bufferData.AddRange(item.GetRawArray());
-
             var bufferArrayData = vertexArray;
 
             gl.BindBuffer(OpenGL.GL_ARRAY_BUFFER, _vertexBuffer);
@@ -155,22 +150,6 @@ namespace Arkchar.Renderer
             gl.DisableClientState(OpenGL.GL_TEXTURE_COORD_ARRAY);
 
             gl.PopMatrix();
-
-            /*gl.Begin(OpenGL.GL_QUADS);
-
-            gl.Vertex(-400, -400);
-            gl.TexCoord(0, 0);
-
-            gl.Vertex(-400, 400);
-            gl.TexCoord(0, 1);
-
-            gl.Vertex(400, 400);
-            gl.TexCoord(1, 1);
-
-            gl.Vertex(400, -400);
-            gl.TexCoord(1, 0);
-
-            gl.End();*/
         }
     }
 }

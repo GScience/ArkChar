@@ -6,12 +6,12 @@
         xmlns:local="clr-namespace:Arkchar"
         xmlns:wpf="clr-namespace:SharpGL.WPF;assembly=SharpGL.WPF"
         mc:Ignorable="d"
-        Title="Arkchar" Height="550" Width="500" AllowsTransparency="True" WindowStyle="None" Background="Transparent" MouseDown="Window_MouseDown" Topmost="True" LocationChanged="Window_LocationChanged" WindowStartupLocation="CenterScreen" MouseUp="Window_MouseUp" Loaded="Window_Loaded" MouseEnter="Window_MouseEnter" Icon="Icon.ico" ShowInTaskbar="False" MouseLeave="Window_MouseLeave">
+        Title="Arkchar" Height="550" Width="500" AllowsTransparency="True" WindowStyle="None" Background="Transparent" MouseDown="Window_MouseDown" Topmost="True" LocationChanged="Window_LocationChanged" WindowStartupLocation="CenterScreen" MouseUp="Window_MouseUp" Loaded="Window_Loaded" MouseEnter="Window_MouseEnter" Icon="Icon.ico" ShowInTaskbar="False" MouseLeave="Window_MouseLeave" Closing="Window_Closing">
     <Grid>
         <StackPanel Orientation="Vertical">
             <wpf:OpenGLControl OpenGLDraw="OpenGLControl_OpenGLDraw" OpenGLInitialized="OpenGLControl_OnOpenGLInitialized" RenderContextType="FBO" DrawFPS="False" FrameRate="23" VerticalAlignment="Center" Height="500"/>
             <StackPanel x:Name="ControlPanel" Orientation="Horizontal" Margin="25,0" VerticalAlignment="Top">
-                <RadioButton x:Name="BuildCharRadioButton" Height="25" FontSize="16" Content="基建动画" Foreground="White" Width="125" GroupName="AnimType" Checked="RadioButton_Checked" IsChecked="True">
+                <RadioButton x:Name="BuildCharRadioButton" Height="25" FontSize="16" Content="基建动画" Foreground="White" Width="125" GroupName="AnimType" Checked="RadioButton_Checked">
                     <RadioButton.Effect>
                         <DropShadowEffect/>
                     </RadioButton.Effect>

@@ -76,6 +76,9 @@ namespace Arkchar
             currentAnimPath = path;
             skeleton?.UpdateCache();
 
+            var centerPos = PointToScreen(new Point(ActualWidth / 2, ActualHeight / 2));
+            skeleton.FlipX = centerPos.X > Screen.PrimaryScreen.WorkingArea.Width / 2.0f;
+
             updater?.Init(this);
         }
 
@@ -212,8 +215,16 @@ namespace Arkchar
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            currentAnimPath = "spot";
+            currentAnimPath = Properties.Settings.Default.Character;
             CharNameComboBox.SelectedValue = currentAnimPath;
+
+            if (Properties.Settings.Default.WindowTop != -1)
+                Top = Properties.Settings.Default.WindowTop;
+            if (Properties.Settings.Default.WindowLeft != -1)
+                Left = Properties.Settings.Default.WindowLeft;
+
+            BuildCharRadioButton.IsChecked = Properties.Settings.Default.IsBuildCharacter;
+            FightCharRadioButton.IsChecked = !Properties.Settings.Default.IsBuildCharacter;
         }
 
         private void Window_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
@@ -239,6 +250,16 @@ namespace Arkchar
         {
             _isMouseInWindow = false;
             _lastTimeMouseLeave = SDL.SDL_GetTicks();
+        }
+
+        private void Window_Closing(object sender, CancelEventArgs e)
+        {
+            Properties.Settings.Default.Character = currentAnimPath;
+            Properties.Settings.Default.IsBuildCharacter = BuildCharRadioButton.IsChecked.GetValueOrDefault(false);
+            Properties.Settings.Default.WindowLeft = (int) Left;
+            Properties.Settings.Default.WindowTop = (int) Top;
+
+            Properties.Settings.Default.Save();
         }
     }
 }

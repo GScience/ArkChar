@@ -21,15 +21,15 @@ namespace Arkchar
         public void Init(SpineWindow spineWindow)
         {
             lastTimeMove = SDL.SDL_GetTicks() / 1000.0f;
-            spineWindow.animation.SetAnimation(0, "Sleep", false);
-            spineWindow.animation.AddAnimation(0, "Relax", true, 0);
+            spineWindow.animationState.SetAnimation(0, "Sleep", false);
+            spineWindow.animationState.AddAnimation(0, "Relax", true, 0);
         }
 
         public void OnMousePress(SpineWindow spineWindow)
         {
-            var current = spineWindow.animation.GetCurrent(0).Animation;
-            spineWindow.animation.SetAnimation(0, "Interact", false);
-            spineWindow.animation.AddAnimation(0, current.Name == "Move" ? "Move" : "Relax", true, 0);
+            var current = spineWindow.animationState.GetCurrent(0).Animation;
+            spineWindow.animationState.SetAnimation(0, "Interact", false);
+            spineWindow.animationState.AddAnimation(0, current.Name == "Move" ? "Move" : "Relax", true, 0);
         }
 
         public void Update(SpineWindow spineWindow)
@@ -39,10 +39,10 @@ namespace Arkchar
             {
                 lastTimeMove = SDL.SDL_GetTicks() / 1000.0f;
                 isMovingAround = true;
-                spineWindow.animation.SetAnimation(0, "Move", true);
+                spineWindow.animationState.SetAnimation(0, "Move", true);
             }
 
-            if (isMovingAround && spineWindow.animation.GetCurrent(0).Animation.Name == "Move")
+            if (isMovingAround && spineWindow.animationState.GetCurrent(0).Animation.Name == "Move")
             {
                 moveScale += 0.2f;
                 if (moveScale >= 1)
@@ -59,7 +59,7 @@ namespace Arkchar
                 {
                     isMovingAround = false;
                     movingSpeed *= -1;
-                    spineWindow.animation.SetAnimation(0, "Relax", true);
+                    spineWindow.animationState.SetAnimation(0, "Relax", true);
                     xOffset = 0;
                 }
             }

@@ -38,11 +38,11 @@ namespace Arkchar
 
         public ICharUpdater updater;
 
-        public bool isGLReady = false;
+        public bool isGLReady;
 
         public Skeleton skeleton;
         public AnimationStateData animationData;
-        public AnimationState animation;
+        public AnimationState animationState;
         public SkeletonMeshRenderer skeletonRenderer;
 
         public string currentAnimPath;
@@ -62,9 +62,16 @@ namespace Arkchar
 
             skeleton = SkeletonLoader.Load(skeletonName);
             animationData = new AnimationStateData(skeleton.Data);
-            animation = new AnimationState(animationData);
+            animationState = new AnimationState(animationData);
 
-            animationData.DefaultMix = 0.5f;
+            if (buildChar)
+            {
+                animationData.DefaultMix = 0.5f;
+            }
+            else
+            {
+                animationData.DefaultMix = 0.0f;
+            }
 
             isBuildChar = buildChar;
 
@@ -80,6 +87,9 @@ namespace Arkchar
             skeleton.FlipX = centerPos.X > Screen.PrimaryScreen.WorkingArea.Width / 2.0f;
 
             updater?.Init(this);
+
+            Properties.Settings.Default.Character = path;
+            Properties.Settings.Default.IsBuildCharacter = buildChar;
         }
 
         public SpineWindow()
@@ -125,16 +135,24 @@ namespace Arkchar
             var currentTime = SDL.SDL_GetTicks();
             var deltaTime = currentTime - _lastTimeUpdate;
 
-            animation?.Update(deltaTime / 1000.0f);
-            animation?.Apply(skeleton);
-            skeleton?.UpdateWorldTransform();
-            
-            skeletonRenderer.Draw(gl, skeleton);
+            try
+            {
+                animationState?.Update(deltaTime / 1000.0f);
+                animationState?.Apply(skeleton);
+                skeleton?.UpdateWorldTransform();
+                
+                skeletonRenderer.Draw(gl, skeleton);
 
-            _lastTimeUpdate = currentTime;
+                _lastTimeUpdate = currentTime;
 
-            // Refresh
-            updater?.Update(this);
+                // Refresh
+                updater?.Update(this);
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show($"刷新骨骼动画时发生错误: {e.Message}");
+                updater = null;
+            }
 
             // Flush OpenGL
             gl.Flush();
@@ -254,8 +272,6 @@ namespace Arkchar
 
         private void Window_Closing(object sender, CancelEventArgs e)
         {
-            Properties.Settings.Default.Character = currentAnimPath;
-            Properties.Settings.Default.IsBuildCharacter = BuildCharRadioButton.IsChecked.GetValueOrDefault(false);
             Properties.Settings.Default.WindowLeft = (int) Left;
             Properties.Settings.Default.WindowTop = (int) Top;
 

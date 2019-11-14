@@ -1,5 +1,5 @@
-﻿斑点=spot
-陈=chen
-能天使（KFC）=angel_kfc
-克罗斯（万圣节）=kroos_witch
-伊桑=ethan
+﻿斑点=spot=true
+陈=chen=true
+能天使（KFC）=angel_kfc=true
+克罗斯（万圣节）=kroos_witch=true
+伊桑=ethan=true

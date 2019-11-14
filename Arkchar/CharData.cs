@@ -10,11 +10,13 @@ namespace Arkchar
     {
         public string FilePath { get; }
         public string Name { get; }
+        public bool HasFightAnim { get; }
 
-        public CharData(string name, string file)
+        public CharData(string name, string file, bool hasFightAnim)
         {
             FilePath = file;
             Name = name;
+            HasFightAnim = hasFightAnim;
         }
     }
 }

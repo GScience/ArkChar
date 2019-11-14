@@ -18,10 +18,17 @@ namespace Arkchar
 
         public float lastTimeMove;
 
+        public bool hasSleep;
+
         public void Init(SpineWindow spineWindow)
         {
+            var animations = spineWindow.animationData.SkeletonData.Animations;
+            hasSleep = animations.Find((animation => animation.Name == "Sleep")) != null;
+
             lastTimeMove = SDL.SDL_GetTicks() / 1000.0f;
-            spineWindow.animationState.SetAnimation(0, "Sleep", false);
+
+            if (hasSleep)
+                spineWindow.animationState.SetAnimation(0, "Sleep", false);
             spineWindow.animationState.AddAnimation(0, "Relax", true, 0);
         }
 

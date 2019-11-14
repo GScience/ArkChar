@@ -54,6 +54,9 @@ namespace Arkchar
             if (!isGLReady)
                 return;
 
+            if (buildChar == isBuildChar && path == currentAnimPath)
+                return;
+
             string skeletonName;
             if (buildChar)
                 skeletonName = "BuildChar." + path;
@@ -114,13 +117,14 @@ namespace Arkchar
 
                 var pair = line.Split('=');
 
-                if (pair.Length != 2)
+                if (pair.Length < 2)
                     continue;
 
                 var name = pair[0];
                 var filePath = pair[1];
+                var hasFight = pair.Length >= 3 ? pair[2] : "false";
 
-                CharNameComboBox.Items.Add(new CharData(name, filePath));
+                CharNameComboBox.Items.Add(new CharData(name, filePath, hasFight.ToLower() == "true"));
             }
         }
 
@@ -192,7 +196,8 @@ namespace Arkchar
 
             var centerPos = PointToScreen(new Point(ActualWidth / 2, ActualHeight / 2));
 
-            skeleton.FlipX = centerPos.X > Screen.PrimaryScreen.WorkingArea.Width / 2.0f;
+            if (skeleton != null)
+                skeleton.FlipX = centerPos.X > Screen.PrimaryScreen.WorkingArea.Width / 2.0f;
         }
 
         private void Window_MouseUp(object sender, MouseButtonEventArgs e)
@@ -226,15 +231,23 @@ namespace Arkchar
         private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (CharNameComboBox.SelectedItem != null)
+            {
+                var hasFightAnim = ((CharData)CharNameComboBox.SelectedItem).HasFightAnim;
+                var radioButtonVisibility = hasFightAnim ? Visibility.Visible : Visibility.Hidden;
+                BuildCharRadioButton.Visibility = radioButtonVisibility;
+
+                if (!hasFightAnim)
+                    BuildCharRadioButton.IsChecked = true;
+
                 SwitchAnimation();
+            }
             else
                 CharNameComboBox.SelectedValue = currentAnimPath;
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            currentAnimPath = Properties.Settings.Default.Character;
-            CharNameComboBox.SelectedValue = currentAnimPath;
+            CharNameComboBox.SelectedValue = Properties.Settings.Default.Character;
 
             if (Properties.Settings.Default.WindowTop != -1)
                 Top = Properties.Settings.Default.WindowTop;

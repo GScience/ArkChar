@@ -39,13 +39,18 @@ using Windows.Storage;
 #endif
 
 namespace Spine {
-	public class Atlas {
+	public class Atlas:IDisposable {
 		List<AtlasPage> pages = new List<AtlasPage>();
 		List<AtlasRegion> regions = new List<AtlasRegion>();
 		TextureLoader textureLoader;
 
-		#if !(UNITY_5 || UNITY_4 || UNITY_WSA || UNITY_WP8 || UNITY_WP8_1) // !UNITY
-		#if WINDOWS_STOREAPP
+        public List<AtlasPage> GetPage()
+        {
+            return pages;
+        }
+
+#if !(UNITY_5 || UNITY_4 || UNITY_WSA || UNITY_WP8 || UNITY_WP8_1) // !UNITY
+#if WINDOWS_STOREAPP
 		private async Task ReadFile(string path, TextureLoader textureLoader) {
 			var folder = Windows.ApplicationModel.Package.Current.InstalledLocation;
 			var file = await folder.GetFileAsync(path).AsTask().ConfigureAwait(false);
@@ -61,9 +66,9 @@ namespace Spine {
 		public Atlas(String path, TextureLoader textureLoader) {
 			this.ReadFile(path, textureLoader).Wait();
 		}
-		#else
+#else
 
-		public Atlas (String path, TextureLoader textureLoader) {
+        public Atlas (String path, TextureLoader textureLoader) {
 
 			#if WINDOWS_PHONE
 			Stream stream = Microsoft.Xna.Framework.TitleContainer.OpenStream(path);

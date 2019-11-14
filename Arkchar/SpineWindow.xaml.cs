@@ -233,8 +233,9 @@ namespace Arkchar
             if (CharNameComboBox.SelectedItem != null)
             {
                 var hasFightAnim = ((CharData)CharNameComboBox.SelectedItem).HasFightAnim;
-                var radioButtonVisibility = hasFightAnim ? Visibility.Visible : Visibility.Hidden;
+                var radioButtonVisibility = hasFightAnim ? Visibility.Visible : Visibility.Collapsed;
                 BuildCharRadioButton.Visibility = radioButtonVisibility;
+                FightCharRadioButton.Visibility = radioButtonVisibility;
 
                 if (!hasFightAnim)
                     BuildCharRadioButton.IsChecked = true;
